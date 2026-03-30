@@ -120,7 +120,7 @@ class GameActivity : AppCompatActivity() {
     }
     private fun pushStateToNetwork() {
         lifecycleScope.launch {
-            NetworkManager.updateGameState(roomCode, GameState.fromEngine(engine))
+            NetworkManager.updateGameState(roomCode, GameState.fromChainEngine(engine))
         }
     }
 
