@@ -89,8 +89,15 @@ class GameActivity : AppCompatActivity() {
     private fun updateUI() {
         boardView.invalidate()
         if (engine.isGameOver) {
-            tvStatus.text = if (engine.currentPlayer == 1) "BLUE WINS!" else "RED WINS!"
+            // FIX 1: If currentPlayer is still 1 (Red) when the game ends, Red made the winning move!
+            tvStatus.text = if (engine.currentPlayer == 1) "RED WINS!" else "BLUE WINS!"
             tvStatus.setTextColor(Color.YELLOW)
+
+            // FIX 2: Automatically return to the home page after 3 seconds
+            lifecycleScope.launch {
+                delay(3000)
+                finish() // Closes this activity and returns to MainActivity
+            }
         } else {
             if (engine.currentPlayer == 1) {
                 tvStatus.text = "Red's Turn"
