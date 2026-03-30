@@ -14,7 +14,7 @@ import java.io.IOException
 // 3. Replace the DB_URL below with your database URL.
 // This REST approach avoids needing the google-services.json CI/CD headache!
 object NetworkManager {
-    private const val DB_URL = "https://your-firebase-db-id-default-rtdb.firebaseio.com"
+    private const val DB_URL = "https://chainreactiondb-default-rtdb.firebaseio.com"
     private val client = OkHttpClient()
     private val gson = Gson()
 
