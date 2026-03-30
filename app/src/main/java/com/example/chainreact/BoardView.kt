@@ -18,6 +18,9 @@ class BoardView(context: Context, private val engine: GameEngine, private val on
     private val p1Paint = Paint().apply { color = Color.parseColor("#FF5252") }
     private val p2Paint = Paint().apply { color = Color.parseColor("#448AFF") }
 
+    // NEW: Track the current rotation of the molecules
+    private var rotationAngle = 0f
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val cellWidth = width.toFloat() / engine.cols
@@ -32,7 +35,10 @@ class BoardView(context: Context, private val engine: GameEngine, private val on
         }
 
         // Draw Atoms/Mass
-        val radius = Math.min(cellWidth, cellHeight) / 4f
+        val radius = Math.min(cellWidth, cellHeight) / 5.5f // Slightly smaller to fit rotations
+        val orbitRadius = radius * 1.3f
+        var hasMoleculesToAnimate = false
+
         for (i in 0 until engine.cols) {
             for (j in 0 until engine.rows) {
                 val cell = engine.grid[i][j]
@@ -41,21 +47,42 @@ class BoardView(context: Context, private val engine: GameEngine, private val on
                     val cx = i * cellWidth + cellWidth / 2
                     val cy = j * cellHeight + cellHeight / 2
                     
-                    // Simple offset drawing for multiple mass
-                    when (cell.mass) {
-                        1 -> canvas.drawCircle(cx, cy, radius, paint)
-                        2 -> {
-                            canvas.drawCircle(cx - radius/2, cy, radius, paint)
-                            canvas.drawCircle(cx + radius/2, cy, radius, paint)
+                    if (cell.mass == 1) {
+                        // 1 atom: stays perfectly still in the center
+                        canvas.drawCircle(cx, cy, radius, paint)
+                    } else {
+                        // 2 or 3 atoms: Spin them around the center!
+                        hasMoleculesToAnimate = true
+                        canvas.save()
+                        canvas.translate(cx, cy)
+                        canvas.rotate(rotationAngle)
+                        
+                        when (cell.mass) {
+                            2 -> {
+                                canvas.drawCircle(-orbitRadius, 0f, radius, paint)
+                                canvas.drawCircle(orbitRadius, 0f, radius, paint)
+                            }
+                            3 -> {
+                                // Space them perfectly 120 degrees apart
+                                for(k in 0..2) {
+                                    val angle = Math.toRadians((k * 120).toDouble())
+                                    val x = (orbitRadius * Math.cos(angle)).toFloat()
+                                    val y = (orbitRadius * Math.sin(angle)).toFloat()
+                                    canvas.drawCircle(x, y, radius, paint)
+                                }
+                            }
                         }
-                        3 -> {
-                            canvas.drawCircle(cx, cy - radius/2, radius, paint)
-                            canvas.drawCircle(cx - radius/2, cy + radius/2, radius, paint)
-                            canvas.drawCircle(cx + radius/2, cy + radius/2, radius, paint)
-                        }
+                        canvas.restore() // Reset canvas for the next cell
                     }
                 }
             }
+        }
+
+        // NEW: If there are grouped molecules, keep advancing the angle and redrawing
+        if (hasMoleculesToAnimate) {
+            rotationAngle += 4f // Adjust this number to change rotation speed
+            if (rotationAngle >= 360f) rotationAngle -= 360f
+            invalidate() // Creates a continuous animation loop
         }
     }
 
