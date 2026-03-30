@@ -10,11 +10,46 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CHAIN REACTION"
+        android:text="MULTI-GAME HUB"
         android:textColor="#FFFFFF"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:layout_marginBottom="48dp"/>
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Game:"
+        android:textColor="#AAAAAA"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/rgGameSelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <RadioButton
+            android:id="@+id/rbChainReaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chain Reaction"
+            android:textColor="#FFF"
+            android:buttonTint="#FF9800"
+            android:checked="true"
+            android:layout_marginEnd="16dp"/>
+
+        <RadioButton
+            android:id="@+id/rbLudo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ludo"
+            android:textColor="#FFF"
+            android:buttonTint="#FF9800"/>
+    </RadioGroup>
 
     <Button
         android:id="@+id/btnVsAi"
