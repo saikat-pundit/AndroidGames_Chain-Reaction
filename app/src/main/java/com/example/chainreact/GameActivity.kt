@@ -130,8 +130,8 @@ class GameActivity : AppCompatActivity() {
                 delay(1000) // Poll every second
                 if (engine.currentPlayer != myPlayerId && !engine.isGameOver) {
                     val state = NetworkManager.pollGameState(roomCode)
-                    if (state != null) {
-                        GameState.applyToEngine(state, engine)
+                   if (state != null) {
+                        GameState.applyToChainEngine(state, engine)
                         updateUI()
                     }
                 }
